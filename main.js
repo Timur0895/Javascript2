@@ -1,6 +1,52 @@
 const API =
   "https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses";
 
+const app = new Vue({
+  el: "#app",
+  data: {
+    goods: [],
+    filteredGoods: [],
+    searchLine: "привязка",
+    isVisibleCart: false,
+  },
+
+  methods: {
+    makeGETRequest(url, callback) {
+      var xhr;
+
+      if (window.XMLHttpRequest) {
+        xhr = new XMLHttpRequest();
+      } else if (window.ActiveXObject) {
+        xhr = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          callback(xhr.responseText);
+        }
+      };
+
+      xhr.open("GET", url, true);
+      xhr.send();
+    },
+
+    filterGoods() {
+      console.log("кнопка Искать");
+    },
+    basket() {
+      isVisibleCart = true;
+      console.log("видимость корзины");
+    },
+  },
+
+  mounted() {
+    this.makeGETRequest(`${API}/catalogData.json`, (goods) => {
+      this.goods = goods;
+      this.filteredGoods = goods;
+    });
+  },
+});
+
 class List {
   constructor(url, container, list = list2) {
     this.container = container;
